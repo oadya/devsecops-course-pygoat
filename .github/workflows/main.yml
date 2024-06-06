@@ -64,6 +64,7 @@ jobs:
        command: quickview,cves
        only-severities: critical,high
        sarif-file: scout-report.sarif
+       exit-code: true # to fail the job when vunerabilities are found
 
    - name: Upload Artifact
      uses: actions/upload-artifact@v3
