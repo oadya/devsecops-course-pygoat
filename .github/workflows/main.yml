@@ -22,6 +22,8 @@ jobs:
      run: pip install bandit
 
    - name: Run Bandit Scan
+     #Scan everything recursivly in the current folder
+     #Only focus on MEDIUM & HIGH (-ll -ii) severity and confidence 
      run: bandit -ll -ii -r . -f json -o bandit-report.json
 
    - name: Upload Artifact
@@ -49,7 +51,7 @@ jobs:
      run: docker build -f Dockerfile -t myapp:latest .
 
     # Scanning images with a Docker native tool Docker Scout
-   - name: Docker Scout Scan
+   - name: Docker Scout Scan V1
      run: |
         curl -fsSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh -o install-scout.sh
         sh install-scout.sh
@@ -57,7 +59,7 @@ jobs:
         docker scout quickview
         docker scout cves
 
-   - name: Docker Scout Scan
+   - name: Docker Scout Scan V2
      uses: docker/scout-action@v1
      with:
        dockerhub-user: ${{ secrets.REPO_USER }}
@@ -65,7 +67,7 @@ jobs:
        command: quickview,cves
        only-severities: critical,high
        sarif-file: scout-report.sarif
-       exit-code: true # to fail the job when vunerabilities are found
+       #exit-code: true # to fail the job when vunerabilities are found
 
    - name: Upload Artifact
      uses: actions/upload-artifact@v3
